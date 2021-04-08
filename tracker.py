@@ -16,10 +16,12 @@ def take_photo(filename, width, height, gps):
 		camera.stop_preview()					
 
 def GotNewSentence(Sentence):
-    print(Sentence)
+	return
+	#print(Sentence)
 
 def GotNewPosition(Position):
-    print(str(Position['time']) + ', ' + "{:.5f}".format(Position['lat']) + ', ' + "{:.5f}".format(Position['lon']) + ', ' + str(Position['alt']) + ', ' + str(Position['sats']))
+	return
+	# print(str(Position['time']) + ', ' + "{:.5f}".format(Position['lat']) + ', ' + "{:.5f}".format(Position['lon']) + ', ' + str(Position['alt']) + ', ' + str(Position['sats']))
 
 print ("Load tracker ...")
 mytracker = Tracker()
