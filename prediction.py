@@ -67,16 +67,16 @@ class Predictor(object):
         if DescentRate > 0.0:
             Density = self.CalculateAirDensity(Altitude)
 	
-            # printf("Alt %.0lf, Rate %.1lf, CDA %.1lf\n", Altitude, DescentRate, (Weight * 9.81)/(0.5 * Density * DescentRate * DescentRate));
+            # printf("Alt %.0lf, Rate %.1lf, CDA %.1lf\n", Altitude, DescentRate, (Weight * 9.81)/(0.5 * Density * DescentRate * DescentRate))
         
             return (Weight * 9.81)/(0.5 * Density * DescentRate * DescentRate)
         else:
             return self.CDA
             
     def CalculateLandingPosition(self, Latitude, Longitude, Altitude):
-        TimeTillLanding = 0;
+        TimeTillLanding = 0
 	
-        Slot = self.GetSlot(Altitude);
+        Slot = self.GetSlot(Altitude)
         DistanceInSlot = Altitude + 1 - Slot * self.SlotSize
 	
         while Altitude > self.LandingAltitude:
@@ -92,7 +92,7 @@ class Predictor(object):
             Latitude += self.Deltas[Slot].latitude * TimeInSlot
             Longitude += self.Deltas[Slot].longitude * TimeInSlot
             
-            # printf("SLOT %d: alt %lu, lat=%lf, long=%lf, rate=%lf, dist=%lu, time=%lf\n", Slot, Altitude, Latitude, Longitude, DescentRate, DistanceInSlot, TimeInSlot);
+            # printf("SLOT %d: alt %lu, lat=%lf, long=%lf, rate=%lf, dist=%lu, time=%lf\n", Slot, Altitude, Latitude, Longitude, DescentRate, DistanceInSlot, TimeInSlot)
             
             TimeTillLanding = TimeTillLanding + TimeInSlot
             Altitude -= DistanceInSlot
@@ -111,7 +111,7 @@ class Predictor(object):
                 if Position['alt'] <= 0:
                     self.AscentRate = 0
                 else:
-                    self.AscentRate = self.AscentRate * 0.7 + (Position['alt'] - self.PreviousPosition['alt']) * 0.3;
+                    self.AscentRate = self.AscentRate * 0.7 + (Position['alt'] - self.PreviousPosition['alt']) * 0.3
 
                 if (Position['alt'] < self.MinimumAltitude) or (self.MinimumAltitude == 0):
                     self.MinimumAltitude = Position['alt']
@@ -121,11 +121,11 @@ class Predictor(object):
 
                 if (self.AscentRate >= 1.0) and (Position['alt'] > (self.MinimumAltitude+150)) and (self.FlightMode == FlightMode.fmIdle):
                     self.FlightMode = FlightMode.fmLaunched
-                    print("*** LAUNCHED ***");
+                    print("*** LAUNCHED ***")
             
                 if (self.AscentRate < -10.0) and (self.MaximumAltitude >= (self.MinimumAltitude+2000)) and (self.FlightMode == FlightMode.fmLaunched):
                     self.FlightMode = FlightMode.fmDescending
-                    print("*** DESCENDING ***");
+                    print("*** DESCENDING ***")
 
                 if (self.AscentRate >= -0.1) and (Position['alt'] <= self.LandingAltitude+2000) and (self.FlightMode == FlightMode.fmDescending):
                     self.FlightMode = FlightMode.fmLanded
@@ -134,7 +134,7 @@ class Predictor(object):
                 if self.FlightMode == FlightMode.fmLaunched:
                     # Going up - store deltas
                     
-                    Slot = self.GetSlot(Position['alt']/2 + self.PreviousPosition['alt']/2);
+                    Slot = self.GetSlot(Position['alt']/2 + self.PreviousPosition['alt']/2)
                         
                     # Deltas are scaled to be horizontal distance per second (i.e. speed)
                     self.Deltas[Slot].latitude = (Position['lat'] - self.PreviousPosition['lat']) / self.PollPeriod
@@ -148,17 +148,17 @@ class Predictor(object):
                 
                 
                 if (self.FlightMode == FlightMode.fmLaunched) or (self.FlightMode == FlightMode.fmDescending):
-                    Result = self.CalculateLandingPosition(Position['lat'], Position['lon'], Position['alt']);
+                    Result = self.CalculateLandingPosition(Position['lat'], Position['lon'], Position['alt'])
 
-                    # GPS->PredictedLandingSpeed = CalculateDescentRate(Config.payload_weight, GPS->CDA, Config.LandingAltitude);
+                    # GPS->PredictedLandingSpeed = CalculateDescentRate(Config.payload_weight, GPS->CDA, Config.LandingAltitude)
 				
                     # printf("Expected Descent Rate = %4.1lf (now) %3.1lf (landing), time till landing %d\n", 
                             # CalculateDescentRate(Config.payload_weight, GPS->CDA, GPS->Altitude),
                             # GPS->PredictedLandingSpeed,
-                            # GPS->TimeTillLanding);
+                            # GPS->TimeTillLanding)
 
-                    # printf("Current    %f, %f, alt %" PRId32 "\n", GPS->Latitude, GPS->Longitude, GPS->Altitude);
-                    # printf("Prediction %f, %f, CDA %lf\n", GPS->PredictedLatitude, GPS->PredictedLongitude, GPS->CDA);
+                    # printf("Current    %f, %f, alt %" PRId32 "\n", GPS->Latitude, GPS->Longitude, GPS->Altitude)
+                    # printf("Prediction %f, %f, CDA %lf\n", GPS->PredictedLatitude, GPS->PredictedLongitude, GPS->CDA)
 
 
                 print('PREDICTOR: ' + str(Position['time']) + ', ' + "{:.5f}".format(Position['lat']) + ', ' + "{:.5f}".format(Position['lon']) + ', ' + str(Position['alt']) + ', ' + str(Position['sats']))

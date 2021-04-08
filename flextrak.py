@@ -29,14 +29,14 @@ class Tracker(object):
         self.Predictor = None
 
         # General settings
-        self.Settings_General_SerialDevice = '/dev/ttyAMA0';
+        self.Settings_General_SerialDevice = '/dev/ttyAMA0'
         self.Settings_General_PayloadID = 'CHANGEME'
         self.Settings_General_FieldList = '01234569A'
         self.Settings_General_FakeGPS = ''
         
         # LoRa settings
         self.Settings_LoRa_Frequency = 434.225
-        self.Settings_LoRa_Mode = 1      
+        self.Settings_LoRa_Mode = 1
         
         # APRS Settings
         self.Settings_APRS_Callsign = ''
@@ -128,9 +128,9 @@ class Tracker(object):
             self.Settings_Camera_HighRadioWidth = config.getint('Camera', 'HighRadioWidth')
             self.Settings_Camera_HighRadioHeight = config.getint('Camera', 'HighRadioHeight')
             #self.add_lora_camera_schedule(callsign=self.Settings_General_PayloadID, period=self.Settings_Camera_RadioPeriod, width=self.Settings_Camera_RadioWidth, height=self.Settings_Camera_RadioHeight)
-            
+
             # Add schedule for radio
-            if (self.Settings_Camera_LowRadioPeriod > 0) or (self.Settings_Camera_HighRadioPeriod):
+            if (self.Settings_Camera_LowRadioPeriod > 0) or (self.Settings_Camera_HighRadioPeriod > 0):
                 self.add_lora_camera_schedule(callsign=self.Settings_General_PayloadID,
                                               lowperiod=self.Settings_Camera_LowRadioPeriod, lowwidth=self.Settings_Camera_LowRadioWidth, lowheight=self.Settings_Camera_LowRadioHeight,
                                               highperiod=self.Settings_Camera_HighRadioPeriod, highwidth=self.Settings_Camera_HighRadioWidth, highheight=self.Settings_Camera_HighRadioHeight)
@@ -160,7 +160,7 @@ class Tracker(object):
     def SendSettings(self):
         self.avr.AddCommand('CH0')      # Low priority mode
 
-        self.avr.AddCommand('CV');		# Request Firmware Version
+        self.avr.AddCommand('CV')		# Request Firmware Version
         
         # // Common Settings
         self.avr.AddCommand('CP' + self.Settings_General_PayloadID)
@@ -171,17 +171,16 @@ class Tracker(object):
         
         # // LoRa Settings
         self.avr.AddCommand('LF' + str(self.Settings_LoRa_Frequency))
-        
         self.avr.AddCommand('LI' + str(Modes[self.Settings_LoRa_Mode]['implicit']))
         self.avr.AddCommand('LE' + str(Modes[self.Settings_LoRa_Mode]['coding']))
         self.avr.AddCommand('LB' + str(Modes[self.Settings_LoRa_Mode]['bandwidth']))
         self.avr.AddCommand('LS' + str(Modes[self.Settings_LoRa_Mode]['spreading']))
         self.avr.AddCommand('LL' + str(Modes[self.Settings_LoRa_Mode]['lowopt']))
         
-        # self.avr.AddCommand('LC' + str(self.Settings_LoRa_Count);
-        # LORA_Count:			Integer;
-        # LORA_CycleTime:		Integer;
-        # LORA_Slot:			Integer;
+        # self.avr.AddCommand('LC' + str(self.Settings_LoRa_Count)
+        # LORA_Count:			Integer
+        # LORA_CycleTime:		Integer
+        # LORA_Slot:			Integer
         
         # // SSDV Settings
         self.avr.AddCommand('SI' + str(self.Settings_SSDV_LowImageCount) + ',' + str(self.Settings_SSDV_HighImageCount) + ',' + str(self.Settings_Camera_High))
@@ -199,7 +198,7 @@ class Tracker(object):
             self.avr.AddCommand('AR' + str(self.Settings_APRS_Random))
             self.avr.AddCommand('AT' + str(self.Settings_APRS_TelemInterval))
 
-        self.avr.AddCommand('CS');			# Store settings
+        self.avr.AddCommand('CS')			# Store settings
     
 
     def set_lora(self, payload_id='CHANGEME', channel=0, frequency=424.250, mode=1, camera=False, image_packet_ratio=6):
@@ -295,8 +294,8 @@ class Tracker(object):
         
         self.SendSettings()
 
-        self.avr.AddCommand('SC');		# Clear SSDV buffer
-        self.avr.AddCommand('SS');		# Request SSDV status
+        self.avr.AddCommand('SC')		# Clear SSDV buffer
+        self.avr.AddCommand('SS')		# Request SSDV status
         
         # Camera
         if self.camera:

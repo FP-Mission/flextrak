@@ -21,12 +21,12 @@ class AVR(object):
         
         # Serial port /dev/ttyAMA0
         self.ser = serial.Serial()
+        self.ser.port = Device
         self.ser.baudrate = 38400
         self.ser.stopbits = 1
         self.ser.bytesize = 8
         self.ser.timeout = 0
-        self.ser.port = Device
-        
+
         self.Commands = []
         
         # NMEA file
@@ -104,7 +104,6 @@ class AVR(object):
                 if self._WhenNewPosition:
                     self._WhenNewPosition(self.GPSPosition)
         elif Command == 'LORA':
-
             if self._WhenNewSentence:
                 self._WhenNewSentence(Parameters)
         elif Command == 'BATT':
@@ -120,7 +119,7 @@ class AVR(object):
 
     def ProcessLine(self, Line):
         
-        print('Rx: ' + Line);
+        print('Rx: ' + Line)
         
         if Line == '*':
             print(Line)
@@ -184,7 +183,7 @@ class AVR(object):
                     
                 if TimeOut > 0:
                     TimeOut -= 1
-                        
+
             else:
                 print("Waiting for port")
                 time.sleep(1)
