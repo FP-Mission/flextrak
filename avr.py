@@ -22,7 +22,7 @@ class AVR(object):
         # Serial port /dev/ttyAMA0
         self.ser = serial.Serial()
         self.ser.port = Device
-        self.ser.baudrate = 19200
+        self.ser.baudrate = 38400
         self.ser.stopbits = 1
         self.ser.bytesize = 8
         self.ser.timeout = 0
