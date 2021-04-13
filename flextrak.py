@@ -36,7 +36,7 @@ class Tracker(object):
         
         # LoRa settings
         self.Settings_LoRa_Frequency = 434.225
-        self.Settings_LoRa_Mode = 1
+        self.Settings_LoRa_Mode = 0
         
         # APRS Settings
         self.Settings_APRS_Callsign = ''
