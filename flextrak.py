@@ -160,7 +160,7 @@ class Tracker(object):
                 #self.add_lora_camera_schedule(callsign=self.Settings_General_PayloadID, period=self.Settings_Camera_RadioPeriod, width=self.Settings_Camera_RadioWidth, height=self.Settings_Camera_RadioHeight)
                 
                 # Add schedule for radio
-                if (self.Settings_Camera_LowRadioPeriod > 0) or (self.Settings_Camera_HighRadioPeriod):
+                if (self.Settings_Camera_LowRadioPeriod > 0) or (self.Settings_Camera_HighRadioPeriod > 0):
                     self.add_lora_camera_schedule(callsign=self.Settings_General_PayloadID,
                                                   lowperiod=self.Settings_Camera_LowRadioPeriod, lowwidth=self.Settings_Camera_LowRadioWidth, lowheight=self.Settings_Camera_LowRadioHeight,
                                                   highperiod=self.Settings_Camera_HighRadioPeriod, highwidth=self.Settings_Camera_HighRadioWidth, highheight=self.Settings_Camera_HighRadioHeight)
@@ -210,10 +210,10 @@ class Tracker(object):
         self.avr.AddCommand('LB' + str(Modes[self.Settings_LoRa_Mode]['bandwidth']))
         self.avr.AddCommand('LS' + str(Modes[self.Settings_LoRa_Mode]['spreading']))
         self.avr.AddCommand('LL' + str(Modes[self.Settings_LoRa_Mode]['lowopt']))        
-        self.avr.AddCommand('LT' + str(self.Settings_LoRa_Cycle));
-        self.avr.AddCommand('LO' + str(self.Settings_LoRa_Slot));
+        self.avr.AddCommand('LT' + str(self.Settings_LoRa_Cycle))
+        self.avr.AddCommand('LO' + str(self.Settings_LoRa_Slot))
         
-        self.avr.AddCommand('LU' + str(self.Settings_LoRa_UplinkCode));
+        self.avr.AddCommand('LU' + str(self.Settings_LoRa_UplinkCode))
         
         # // SSDV Settings
         if self.Settings_Camera_Enabled:

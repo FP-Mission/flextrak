@@ -34,8 +34,8 @@ mytracker.start()
 print ("Loop ...")
 while True:
 	# if you have extra sensor values to include in the telemetry, add them with lines like:
-    # mytracker.AddField(0, 12)
-    # The first value (0) is the field number from 0 to 3
+	# mytracker.AddField(0, 12)
+	# The first value (0) is the field number from 0 to 5
     # The second valve (12) is the value of that field
 
     # ** If you are using floating point values, then scale them to be integers.  **
@@ -46,4 +46,4 @@ while True:
     #
     # You also need to include the field in the field list.  These fields are I (field 0), through N (field 5).
 
-    sleep(5)
+	sleep(5)
