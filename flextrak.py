@@ -176,7 +176,7 @@ class Tracker(object):
         self.avr.AddCommand('LB' + str(Modes[self.Settings_LoRa_Mode]['bandwidth']))
         self.avr.AddCommand('LS' + str(Modes[self.Settings_LoRa_Mode]['spreading']))
         self.avr.AddCommand('LL' + str(Modes[self.Settings_LoRa_Mode]['lowopt']))
-        
+        self.avr.AddCommand('LT6')  # Disable TDM Cycle Time
         # self.avr.AddCommand('LC' + str(self.Settings_LoRa_Count)
         # LORA_Count:			Integer
         # LORA_CycleTime:		Integer
@@ -186,6 +186,7 @@ class Tracker(object):
         self.avr.AddCommand('SI' + str(self.Settings_SSDV_LowImageCount) + ',' + str(self.Settings_SSDV_HighImageCount) + ',' + str(self.Settings_Camera_High))
 
         # APRS settings
+        # !!! APRS Disabled in current flexavr firmware version
         print("APRS: " + self.Settings_APRS_Callsign)
         self.avr.AddCommand('AP' + self.Settings_APRS_Callsign)
         if self.Settings_APRS_Callsign != '':
