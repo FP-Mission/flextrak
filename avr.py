@@ -2,7 +2,7 @@ import math
 import serial
 import threading
 import time
-import datetime
+from datetime import datetime
 
 class AVR(object):
     PortOpen = False
@@ -15,6 +15,7 @@ class AVR(object):
         self._WhenNewSentence = None
         self._WhenSSDVReady = None
         self.IsOpen = False
+        self.CanSendNextCommand = False
         
         self.GPSPosition = {'time': '00:00:00', 'lat': 0.0, 'lon': 0.0, 'alt': 0, 'sats': 0, 'fixtype': 0}
         self.Sensors = {'battery_voltage': 0.0, 'internal_temperature': 0.0, 'external_temperature': 0.0, 'version': ''}
@@ -78,17 +79,18 @@ class AVR(object):
     def ProcessCommand(self, Command, Parameters):       
         if Command == 'SSDV':
             if Parameters == '0':
-                print("SSDV BUFFER EMPTY")
+                self.print_log("SSDV BUFFER EMPTY")
                 if self._WhenSSDVReady:
                     self._WhenSSDVReady()
             else:
-                print(Command + ' = ' + Parameters)
+                # print(Command + ' = ' + Parameters) # print ssdv buffer size
+                pass
         elif Command == 'GPS':
             # GPS=12:6:41,51.95056,-2.54472,102,6
             Fields = Parameters.split(',')
             
             if Fields[1] != '':
-                self.GPSPosition['time'] = datetime.datetime.strptime(Fields[0] + ' ' + Fields[1], '%d/%m/%Y %H:%M:%S')
+                self.GPSPosition['time'] = datetime.strptime(Fields[0] + ' ' + Fields[1], '%d/%m/%Y %H:%M:%S')
 
                 if Fields[1] != '':
                     self.GPSPosition['lat'] = float(Fields[2])
@@ -115,24 +117,26 @@ class AVR(object):
         elif Command == 'VER':
             self.Sensors['version'] = Parameters
         else:
-            print("UNKNOWN RESPONSE " + Command + '=' + Parameters)
+            print("Unknown command:" + Command + '=' + Parameters)
+
+    def print_log(this, log):
+        dt = datetime.now().strftime("[%H:%M:%S] ")
+        print(dt + log)
 
     def ProcessLine(self, Line):
-        
-        print('Rx: ' + Line)
-        
-        if Line == '*':
-            print(Line)
+        if Line == '*' or Line == '?':
+            print('->' + ('Ack' if Line == '*' else 'Unknown'))
             self.Commands = self.Commands[1:]
             self.CanSendNextCommand = True
         else:
             fields = Line.split('=', 2)
-            
+
             if len(fields) == 2:
+                self.print_log('Rx: ' + Line)
                 self.ProcessCommand(fields[0].upper(), fields[1])
             else:
-                pass
-                # print(Line)
+                #pass
+                print("[AVR] " + Line)
                 
     def AddCommand(self, Command):
         self.Commands.append(Command)
@@ -172,7 +176,7 @@ class AVR(object):
                         # print("CAN SEND")
                         Command = '~' + self.Commands[0] + '\r\n'
                         self.ser.write(Command.encode())
-                        print ('TX: ' + self.Commands[0])
+                        self.print_log('TX: ' + self.Commands[0])
                         if self.Commands[0] == 'CH1':
                             HighPriorityMode = True
                         if self.Commands[0] == 'CH0':
