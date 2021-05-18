@@ -6,13 +6,13 @@ import os
 import threading
 import configparser
 
-Modes=[{'implicit': 0, 'coding': 8, 'bandwidth': 3, 'spreading': 11, 'lowopt': 1},
-       {'implicit': 1, 'coding': 5, 'bandwidth': 3, 'spreading':  6, 'lowopt': 0},
-       {'implicit': 0, 'coding': 8, 'bandwidth': 6, 'spreading':  8, 'lowopt': 0},
-       {'implicit': 0, 'coding': 6, 'bandwidth': 8, 'spreading':  7, 'lowopt': 0},
-       {'implicit': 1, 'coding': 5, 'bandwidth': 8, 'spreading':  6, 'lowopt': 0},
-       {'implicit': 0, 'coding': 8, 'bandwidth': 5, 'spreading': 11, 'lowopt': 0},
-       {'implicit': 1, 'coding': 5, 'bandwidth': 5, 'spreading':  6, 'lowopt': 0}]
+Modes=[{'implicit': 0, 'coding': 8, 'bandwidth': 3, 'spreading': 11, 'lowopt': 1},  # 0
+       {'implicit': 1, 'coding': 5, 'bandwidth': 3, 'spreading':  6, 'lowopt': 0},  # 1
+       {'implicit': 0, 'coding': 8, 'bandwidth': 6, 'spreading':  8, 'lowopt': 0},  # 2
+       {'implicit': 0, 'coding': 6, 'bandwidth': 8, 'spreading':  7, 'lowopt': 0},  # 3
+       {'implicit': 1, 'coding': 5, 'bandwidth': 8, 'spreading':  6, 'lowopt': 0},  # 4
+       {'implicit': 0, 'coding': 8, 'bandwidth': 5, 'spreading': 11, 'lowopt': 0},  # 5
+       {'implicit': 1, 'coding': 5, 'bandwidth': 5, 'spreading':  6, 'lowopt': 0}]  # 6
 
 def StringToBoolean(Value):
     return (Value + 'F')[0] in ('1', 'T', 't', 'Y', 'y')
@@ -301,6 +301,10 @@ class Tracker(object):
         self._WhenNewPosition = value
 
     def __tracker_thread(self):
+        # while True:
+        #     self.avr.AddCommand('LMCoucou')
+        #     time.sleep(2)
+
         while True:
             # test if we need to send next SSDV packet yet
             if self.camera:
@@ -326,7 +330,7 @@ class Tracker(object):
         self.avr.WhenSSDVReady = self.SSDVBufferEmpty
         
         self.avr.start()
-        
+
         self.SendSettings()
 
         self.avr.AddCommand('SC')		# Clear SSDV buffer

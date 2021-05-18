@@ -136,7 +136,7 @@ class AVR(object):
                 self.ProcessCommand(fields[0].upper(), fields[1])
             else:
                 #pass
-                print("[AVR] " + Line)
+                self.print_log("[AVR] " + Line)
                 
     def AddCommand(self, Command):
         self.Commands.append(Command)
